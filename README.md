@@ -27,7 +27,7 @@ A lightweight, feature-rich auto-clicker for Windows with multi-monitor support,
 - **Global Hotkeys** — F6 to start, F7 to stop (configurable)
 - **Save / Reset Settings** — Persisted as JSON
 - **Dark UI** — Themed title bar via DWM API, dark controls throughout
-- **Admin Mode** — Requests elevation for reliable hotkey registration and foreground click support
+- **No admin required** — Runs with normal user rights; no UAC prompt on launch
 
 ---
 
@@ -84,7 +84,7 @@ MyAutoClicker/
 ├── SettingsManager.cs    # JSON settings persistence
 ├── Program.cs            # Entry point
 ├── MyAutoClicker.csproj  # Project file (.NET 10, WinForms)
-├── app.manifest          # PerMonitorV2 DPI awareness + admin elevation
+├── app.manifest          # PerMonitorV2 DPI awareness (no admin elevation)
 ├── build.bat             # One-click build script
 └── .gitignore
 ```
