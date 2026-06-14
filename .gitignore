@@ -1,0 +1,49 @@
+## .gitignore for .NET / WinForms (MyAutoClicker)
+
+# Build output
+bin/
+obj/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vcxproj.filters
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Publish output (single-file EXE, not source)
+publish/
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs / temp
+*.log
+*.tmp
+*.temp
+
+# User-specific settings
+*.rsuser
+.localhistory/
+
+# Compiled binary at project root (runtime artifact)
+MyAutoClicker.exe
+
+# Runtime user data (saved settings — machine-specific)
+clicker_settings.json
+
+# Internal planning / dev notes
+implementation_plan.md
