@@ -4,8 +4,8 @@
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
-        <!-- Force the application to run as Administrator -->
-        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+        <!-- Runs with normal user rights — no UAC prompt needed for Roblox clicking -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>
