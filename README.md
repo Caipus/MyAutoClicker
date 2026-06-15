@@ -12,6 +12,8 @@ A lightweight, feature-rich auto-clicker for Windows with multi-monitor support,
 
 - **Click Interval** — Set hours, minutes, seconds, milliseconds between clicks
 - **Click Repeat** — Infinite loop or fixed repeat count
+- **Human Tolerance (Humanize)** — Optional random interval tolerance (+/- %) to mimic human click accuracy (e.g. 1000ms +/- 10%), with a live millisecond offset preview.
+- **Bilingual User Help** — Click the `?` icon in the header to open a bilingual help dialog switchable between English and German.
 - **Mouse Button** — Left, Right, or Middle click
 - **Click Type** — Single or Double click
 - **Click Position Modes:**
@@ -19,7 +21,7 @@ A lightweight, feature-rich auto-clicker for Windows with multi-monitor support,
   - **Target Specific Application** — Clicks a fixed location in a target window, regardless of where your mouse is
 - **Click Modes (Target App):**
   - **Background** — Sends `WM_LBUTTONDOWN/UP` directly to the window; no focus required
-  - **Foreground** — Moves the mouse to the target and forces focus; required for some games (e.g. Roblox)
+  - **Foreground** — Moves the mouse to the target and forces focus (default); required for some games (e.g. Roblox)
 - **Coordinate Modes:**
   - **Window-relative** — Click position follows the window if it's moved
   - **Screen position** — Click position is fixed to absolute screen coordinates
@@ -71,6 +73,17 @@ Output: `MyAutoClicker.exe` (single file, ~12 MB)
 3. Choose **Click Mode** (Background for most apps, Foreground for games)
 4. Choose **Coord Mode** (Window-relative to follow the window, Screen position for fixed coordinates)
 5. Press **F6** to start — clicks fire at the target regardless of where your mouse is
+
+### Human Tolerance (Humanize)
+
+1. Check **Enable:** under the **HUMAN TOLERANCE** section at the bottom-left.
+2. Set a percentage (e.g., 10%).
+3. The clicker will randomly vary the click interval by up to that percentage (e.g., at a 1000ms base and 10% tolerance, clicks will fire randomly between 900ms and 1100ms).
+4. The live millisecond offset range is displayed as `(+/- X ms)`.
+
+### Bilingual Help
+
+Click the `?` icon in the top-right header to open the bilingual user help. Use the **English** or **Deutsch** buttons to switch between languages dynamically.
 
 ---
 
