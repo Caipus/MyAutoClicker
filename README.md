@@ -2,9 +2,17 @@
 
 A lightweight, feature-rich auto-clicker for Windows with multi-monitor support, window targeting, and background clicking — built in C# / WinForms (.NET 10).
 
-![Platform](https://img.shields.io/badge/platform-Windows-blue)
-![.NET](https://img.shields.io/badge/.NET-10-purple)
-![Version](https://img.shields.io/badge/version-1.0.0-cyan)
+[![Download Latest](https://img.shields.io/badge/Download-Latest%20Release-green?style=for-the-badge&logo=github)](https://github.com/Caipus/MyAutoClicker/releases/latest)
+
+---
+
+## 📥 Download
+
+If you just want to run the application, you do **not** need to install any SDK or compile the code:
+
+1. Go to the [Releases](https://github.com/Caipus/MyAutoClicker/releases) page.
+2. Under the latest version, click on **`MyAutoClicker.exe`** (or the `.zip` package if your browser blocks direct executable downloads) to download it.
+3. Open the downloaded file and start clicking!
 
 ---
 
