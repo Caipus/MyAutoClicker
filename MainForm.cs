@@ -29,6 +29,12 @@ namespace MyAutoClicker
          private RadioButton rbInfinite = null!;
          private RadioButton rbTimes = null!;
          private NumericUpDown numRepeatCount = null!;
+         
+         private Label toleranceHeader = null!;
+         private CheckBox chkUseRandomTolerance = null!;
+         private NumericUpDown numRandomTolerancePercent = null!;
+         private Label lblPercentSign = null!;
+         private Label lblTolerancePreview = null!;
  
          private Panel rightPanel = null!;
          private Label optionsHeader = null!;
@@ -239,9 +245,57 @@ namespace MyAutoClicker
             rbTimes.CheckedChanged += (s, e) => numRepeatCount.Enabled = rbTimes.Checked;
             rbInfinite.CheckedChanged += (s, e) => numRepeatCount.Enabled = !rbInfinite.Checked;
 
+            toleranceHeader = new Label
+            {
+                Text = "HUMAN TOLERANCE",
+                Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(0, 180, 216),
+                Location = new Point(15, 275),
+                AutoSize = true
+            };
+
+            chkUseRandomTolerance = new CheckBox
+            {
+                Text = "Enable:",
+                Location = new Point(15, 300),
+                Size = new Size(70, 26),
+                ForeColor = Color.White
+            };
+
+            numRandomTolerancePercent = CreateNumericInput(85, 298, 55, 0, 99);
+            numRandomTolerancePercent.Value = 10;
+            numRandomTolerancePercent.Enabled = false;
+
+            lblPercentSign = new Label
+            {
+                Text = "%",
+                Location = new Point(142, 301),
+                AutoSize = true,
+                ForeColor = Color.White
+            };
+
+            lblTolerancePreview = new Label
+            {
+                Text = "(+/- 0 ms)",
+                Location = new Point(160, 301),
+                AutoSize = true,
+                ForeColor = Color.FromArgb(155, 155, 155)
+            };
+
+            chkUseRandomTolerance.CheckedChanged += (s, e) => {
+                numRandomTolerancePercent.Enabled = chkUseRandomTolerance.Checked;
+                UpdateTolerancePreview();
+            };
+            numRandomTolerancePercent.ValueChanged += (s, e) => UpdateTolerancePreview();
+            numHours.ValueChanged += (s, e) => UpdateTolerancePreview();
+            numMinutes.ValueChanged += (s, e) => UpdateTolerancePreview();
+            numSeconds.ValueChanged += (s, e) => UpdateTolerancePreview();
+            numMilliseconds.ValueChanged += (s, e) => UpdateTolerancePreview();
+
             leftPanel.Controls.AddRange(new Control[] {
                 intervalHeader, lblHrs, numHours, lblMins, numMinutes, lblSecs, numSeconds, lblMs, numMilliseconds,
-                repeatHeader, rbInfinite, rbTimes, numRepeatCount
+                repeatHeader, rbInfinite, rbTimes, numRepeatCount,
+                toleranceHeader, chkUseRandomTolerance, numRandomTolerancePercent, lblPercentSign, lblTolerancePreview
             });
 
             // 3. Right Panel (Options & Position selection)
@@ -364,7 +418,7 @@ namespace MyAutoClicker
             var lblMode = new Label { Text = "Click Mode:", Location = new Point(390, 12), Size = new Size(145, 18), ForeColor = Color.White };
             comboClickMode = CreateComboBox(390, 30, 145);
             comboClickMode.Items.AddRange(new object[] { "Background", "Foreground" });
-            comboClickMode.SelectedIndex = 0;
+            comboClickMode.SelectedIndex = 1;
 
             var lblCoordModeLabel = new Label { Text = "Coord Mode:", Location = new Point(390, 60), Size = new Size(145, 18), ForeColor = Color.White };
             comboCoordMode = CreateComboBox(390, 78, 145);
@@ -526,6 +580,10 @@ namespace MyAutoClicker
             numMinutes.Value = settings.Minutes;
             numSeconds.Value = settings.Seconds;
             numMilliseconds.Value = settings.Milliseconds;
+            chkUseRandomTolerance.Checked = settings.UseRandomTolerance;
+            numRandomTolerancePercent.Value = settings.RandomTolerancePercent;
+            numRandomTolerancePercent.Enabled = settings.UseRandomTolerance;
+            UpdateTolerancePreview();
 
             rbInfinite.Checked = settings.InfiniteRepeat;
             rbTimes.Checked = !settings.InfiniteRepeat;
@@ -577,6 +635,8 @@ namespace MyAutoClicker
             settings.Minutes = (int)numMinutes.Value;
             settings.Seconds = (int)numSeconds.Value;
             settings.Milliseconds = (int)numMilliseconds.Value;
+            settings.UseRandomTolerance = chkUseRandomTolerance.Checked;
+            settings.RandomTolerancePercent = (int)numRandomTolerancePercent.Value;
 
             settings.InfiniteRepeat = rbInfinite.Checked;
             settings.RepeatCount = (int)numRepeatCount.Value;
@@ -611,6 +671,10 @@ namespace MyAutoClicker
             numMinutes.Value = settings.Minutes;
             numSeconds.Value = settings.Seconds;
             numMilliseconds.Value = settings.Milliseconds;
+            chkUseRandomTolerance.Checked = settings.UseRandomTolerance;
+            numRandomTolerancePercent.Value = settings.RandomTolerancePercent;
+            numRandomTolerancePercent.Enabled = settings.UseRandomTolerance;
+            UpdateTolerancePreview();
 
             rbInfinite.Checked = settings.InfiniteRepeat;
             rbTimes.Checked = !settings.InfiniteRepeat;
@@ -629,7 +693,7 @@ namespace MyAutoClicker
 
             numTargetX.Value = 0;
             numTargetY.Value = 0;
-            comboClickMode.SelectedIndex = 0;
+            comboClickMode.SelectedIndex = 1;
             comboCoordMode.SelectedIndex = 0;
             lblCoordsMode.Text = "(window-relative)";
 
@@ -711,6 +775,8 @@ namespace MyAutoClicker
             settings.Minutes = (int)numMinutes.Value;
             settings.Seconds = (int)numSeconds.Value;
             settings.Milliseconds = (int)numMilliseconds.Value;
+            settings.UseRandomTolerance = chkUseRandomTolerance.Checked;
+            settings.RandomTolerancePercent = (int)numRandomTolerancePercent.Value;
             settings.InfiniteRepeat = rbInfinite.Checked;
             settings.RepeatCount = (int)numRepeatCount.Value;
             settings.MouseButton = comboMouseButton.SelectedItem?.ToString() ?? "Left";
@@ -759,6 +825,8 @@ namespace MyAutoClicker
                              (settings.Seconds * 1000) + 
                              settings.Milliseconds;
             if (intervalMs <= 0) intervalMs = 1;
+
+            Random rand = new Random();
 
             while (isClicking)
             {
@@ -814,15 +882,47 @@ namespace MyAutoClicker
                 }
 
                 // Smooth responsive sleeping
+                int currentIntervalMs = intervalMs;
+                if (settings.UseRandomTolerance && settings.RandomTolerancePercent > 0)
+                {
+                    int maxToleranceMs = (int)Math.Round((double)intervalMs * settings.RandomTolerancePercent / 100.0);
+                    if (maxToleranceMs > 0)
+                    {
+                        int tolerance = rand.Next(-maxToleranceMs, maxToleranceMs + 1);
+                        currentIntervalMs = Math.Max(1, intervalMs + tolerance);
+                    }
+                }
+
                 int elapsed = 0;
                 const int sleepChunk = 25;
-                while (isClicking && elapsed < intervalMs)
+                while (isClicking && elapsed < currentIntervalMs)
                 {
-                    int toSleep = Math.Min(sleepChunk, intervalMs - elapsed);
+                    int toSleep = Math.Min(sleepChunk, currentIntervalMs - elapsed);
                     Thread.Sleep(toSleep);
                     elapsed += toSleep;
                 }
             }
+        }
+
+        private void UpdateTolerancePreview()
+        {
+            if (chkUseRandomTolerance == null || numRandomTolerancePercent == null || lblTolerancePreview == null)
+                return;
+
+            if (!chkUseRandomTolerance.Checked)
+            {
+                lblTolerancePreview.Text = "(+/- 0 ms)";
+                return;
+            }
+
+            int intervalMs = ((int)numHours.Value * 3600000) + 
+                             ((int)numMinutes.Value * 60000) + 
+                             ((int)numSeconds.Value * 1000) + 
+                             (int)numMilliseconds.Value;
+
+            int pct = (int)numRandomTolerancePercent.Value;
+            int toleranceMs = (int)Math.Round((double)intervalMs * pct / 100.0);
+            lblTolerancePreview.Text = $"(+/- {toleranceMs} ms)";
         }
 
         private IntPtr FindWindowByProcessName(string processName, string windowTitle)
